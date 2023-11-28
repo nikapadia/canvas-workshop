@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Canvas Workshop</title>
+	</head>
+	<body>
+		<canvas
+			id="canvas1"
+			width="500"
+			height="500"
+			style="border: 1px solid black"
+		></canvas>
+		<canvas
+			id="canvas2"
+			width="500"
+			height="500"
+			style="border: 1px solid black"
+		></canvas>
+		<canvas
+			id="canvas3"
+			width="500"
+			height="500"
+			style="border: 1px solid black"
+		></canvas>
+        <!-- <button id="btn-dl">Download</button> -->
+	</body>
+</html>
+
+<script>
+	const canvas = document.getElementById("canvas1");
+	const ctx = canvas.getContext("2d");
+	ctx.fillStyle = "red";
+	ctx.fillRect(10, 10, 100, 100);
+
+	const canvas2 = document.getElementById("canvas2");
+	const ctx2 = canvas2.getContext("2d");
+	const circle = {
+		x: 100,
+		y: 100,
+		size: 25,
+		dx: 5,
+		dy: 3,
+	};
+
+	function drawCircle() {
+		ctx2.beginPath();
+		ctx2.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2);
+		ctx2.fillStyle = "blue";
+		ctx2.fill();
+	}
+
+	function update() {
+		// What happens if we don't clear the canvas?
+		ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+		drawCircle();
+		circle.x += circle.dx;
+		circle.y += circle.dy;
+
+		if (
+			circle.x + circle.size > canvas2.width ||
+			circle.x - circle.size < 0
+		) {
+			circle.dx *= -1;
+		}
+
+		if (
+			circle.y + circle.size > canvas2.height ||
+			circle.y - circle.size < 0
+		) {
+			circle.dy *= -1;
+		}
+
+		requestAnimationFrame(update);
+	}
+
+	update(); 
+
+	const canvas3 = document.getElementById("canvas3");
+	const ctx3 = canvas3.getContext("2d");
+
+	const player = {
+		w: 32,
+		h: 48,
+		x: 50,
+		y: 50,
+		speed: 5,
+		dx: 0,
+		dy: 0,
+	};
+
+	function drawPlayer() {
+		ctx3.beginPath();
+        ctx3.arc(player.x, player.y, 25, 0, Math.PI * 2);
+		ctx3.fillStyle = "green";
+		ctx3.fill();
+	}
+
+	function newPos() {
+		player.x += player.dx;
+		player.y += player.dy;
+        console.log(player.x, player.y, player.dx, player.dy);
+
+		detectWalls();
+	}
+
+	function detectWalls() {
+		if (player.x < 0) {
+			// left
+            player.x = 0;
+		}
+		if (player.x + player.w > canvas.width) {
+			// right
+			player.x = canvas.width - player.w;
+		}
+
+		if (player.y < 0) {
+			// top
+			player.y = 0;
+		}
+		if (player.y + player.h > canvas.height) {
+			// bot
+			player.y = canvas.height - player.h;
+		}
+	}
+
+    // drawPlayer();
+
+	function update2() {
+		// ctx3.clearRect(0, 0, 500, 500);
+		newPos();
+		drawPlayer();
+		requestAnimationFrame(update2);
+	}
+
+	function moveUp() {
+		player.dy = -player.speed;
+	}
+
+	function moveDown() {
+		player.dy = player.speed;
+	}
+
+	function moveRight() {
+		player.dx = player.speed;
+	}
+
+	function moveLeft() {
+		player.dx = -player.speed;
+	}
+
+    function fireProjectile() {
+        // create a new projectile
+        ctx3.beginPath();
+        ctx3.arc(player.x, player.y, 5, 0, Math.PI * 2);
+        ctx3.fillStyle = "red";
+        ctx3.fill();
+
+        // move the projectile
+        // detect collision
+        // remove the projectile
+    }
+
+    function keyDown(e) {
+		if (e.key === "ArrowRight" || e.key === "Right") {
+			moveRight();
+		} else if (e.key === "ArrowLeft" || e.key === "Left") {
+			moveLeft();
+		} else if (e.key === "ArrowUp" || e.key === "Up") {
+			moveUp();
+		} else if (e.key === "ArrowDown" || e.key === "Down") {
+			moveDown();
+		} else if (e.key === " ") {
+            console.log("fire")
+            fireProjectile();
+        }
+	}
+
+	function keyUp(e) {
+		if (
+			e.key == "Right" ||
+			e.key == "ArrowRight" ||
+			e.key == "Left" ||
+			e.key == "ArrowLeft" ||
+			e.key == "Up" ||
+			e.key == "ArrowUp" ||
+			e.key == "Down" ||
+			e.key == "ArrowDown"
+		) {
+			player.dx = 0;
+			player.dy = 0;
+		}
+	}
+
+	update2();
+
+	document.addEventListener("keydown", keyDown);
+	document.addEventListener("keyup", keyUp);
+</script>
