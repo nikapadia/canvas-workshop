@@ -36,6 +36,7 @@ function App() {
         element.remove();
         newElements.pop();
         setElements(newElements);
+        setSelectedElement(null);
     }
 
     const clearElements = () => {

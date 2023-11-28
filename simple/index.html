@@ -125,10 +125,8 @@
 		}
 	}
 
-    // drawPlayer();
-
 	function update2() {
-		// ctx3.clearRect(0, 0, 500, 500);
+		ctx3.clearRect(0, 0, 500, 500);
 		newPos();
 		drawPlayer();
 		requestAnimationFrame(update2);
@@ -149,18 +147,6 @@
 	function moveLeft() {
 		player.dx = -player.speed;
 	}
-
-    function fireProjectile() {
-        // create a new projectile
-        ctx3.beginPath();
-        ctx3.arc(player.x, player.y, 5, 0, Math.PI * 2);
-        ctx3.fillStyle = "red";
-        ctx3.fill();
-
-        // move the projectile
-        // detect collision
-        // remove the projectile
-    }
 
     function keyDown(e) {
 		if (e.key === "ArrowRight" || e.key === "Right") {
