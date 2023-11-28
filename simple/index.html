@@ -81,10 +81,9 @@
 	const ctx3 = canvas3.getContext("2d");
 
 	const player = {
-		w: 32,
-		h: 48,
 		x: 50,
 		y: 50,
+        r: 25,
 		speed: 5,
 		dx: 0,
 		dy: 0,
@@ -92,7 +91,7 @@
 
 	function drawPlayer() {
 		ctx3.beginPath();
-        ctx3.arc(player.x, player.y, 25, 0, Math.PI * 2);
+        ctx3.arc(player.x, player.y, player.r, 0, Math.PI * 2);
 		ctx3.fillStyle = "green";
 		ctx3.fill();
 	}
@@ -106,22 +105,22 @@
 	}
 
 	function detectWalls() {
-		if (player.x < 0) {
+		if (player.x <= 0) {
 			// left
             player.x = 0;
 		}
-		if (player.x + player.w > canvas.width) {
+		if (player.x + player.r > canvas.width) {
 			// right
-			player.x = canvas.width - player.w;
+			player.x = canvas.width - player.r;
 		}
 
 		if (player.y < 0) {
 			// top
 			player.y = 0;
 		}
-		if (player.y + player.h > canvas.height) {
+		if (player.y + player.r > canvas.height) {
 			// bot
-			player.y = canvas.height - player.h;
+			player.y = canvas.height - player.r;
 		}
 	}
 
